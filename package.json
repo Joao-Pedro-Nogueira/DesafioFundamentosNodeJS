@@ -1,0 +1,13 @@
+{
+  "name": "desafio-01-fundamentos-nodejs",
+  "version": "1.0.0",
+  "description": "Esta aplicação consiste em um servidor que realiza o CRUD de um sistema de tasks (tarefas)",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "João Pedro Nogueira",
+  "license": "MIT"
+}
