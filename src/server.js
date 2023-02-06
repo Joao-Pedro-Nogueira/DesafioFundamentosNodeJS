@@ -1,29 +1,33 @@
+import { randomUUID } from 'node:crypto'
 import http from 'node:http'
-import crypto, { randomUUID } from 'node:crypto'
+import { Database } from './database.js'
+import { json } from './middlewares/json.js'
 
-const tasks = []
+const database = new Database()
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const { method, url } = request
 
+  await json(request, response)
+
   if (method === 'GET' && url === '/tasks') {
-    return response
-      .setHeader('Content-type', 'application/json')
-      .end(JSON.stringify(tasks))
+    const tasks = database.select('tasks')
+    return response.end(JSON.stringify(tasks))
   }
 
   if (method === 'POST' && url === '/tasks') {
+    const { title, description } = request.body
+
     const newTask = {
       id: randomUUID(),
-      title: 'Finalizar desafio de Node',
-      description:
-        'Finalizar desafio de criação de servidor da trilha de NodeJS',
-      created_at: new Date()
+      title,
+      description,
+      date: new Date()
     }
 
-    tasks.push(newTask)
+    database.insert('tasks', newTask)
 
-    return response.end('Usuário criado')
+    return response.writeHead(201).end()
   }
 
   return response.end(404)
